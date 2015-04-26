@@ -1,0 +1,15 @@
+pip
+pandas >=0.16,<0.17
+numpy
+scipy
+IPython
+matplotlib
+pyodbc
+lxml
+wxPython
+coverage
+numexpr
+pytables
+scikit-learn
+cvxopt
+cython
