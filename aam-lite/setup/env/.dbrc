@@ -1,0 +1,2 @@
+MSSQL_DEFAULT::::master:ACADIAN:USER:PASSWORD:mssql:/bulkinsert
+MYSQL_DEFAULT::::mysql::USER:PASSWORD:mysql:/bulkinsert
