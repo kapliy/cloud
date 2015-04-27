@@ -1,0 +1,13 @@
+{
+ "schedule": "R1\/2014-01-01T18:15:00Z\/PT30M",
+ "name": "docker_once",
+ "container": {
+   "type": "DOCKER",
+   "image": "libmesos/ubuntu",
+   "volumes": [ { "containerPath": "/opt/anaconda", "hostPath": "/opt/anaconda", "mode": "RO" } ]
+ },
+ "cpus": "0.5",
+ "mem": "512",
+ "uris": [],
+ "command": "hostname; date; echo 'ALL DONE'"
+}
