@@ -1,0 +1,42 @@
+{
+  "id": "ipython-notebook",
+  "cmd": "/notebook.sh",
+  "cpus": 0.5,
+  "mem": 1024,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "ipython/scipyserver",
+      "network": "BRIDGE",
+      "privileged": false,
+      "portMappings": [
+        { "containerPort": 8888, "hostPort": 0, "protocol": "tcp" }
+      ]
+    },
+    "volumes": [
+            {
+                "containerPath": "/opt/anaconda_host",
+                "hostPath": "/opt/anaconda",
+                "mode": "RO"
+            }
+     ]
+  },
+  "env": {
+      "USE_HTTP": "1",
+      "PASSWORD": "abc"
+  },
+  "constraints": [
+       ["host", "LIKE", "bos-rndjob3.*"]
+  ],
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "path": "/",
+      "gracePeriodSeconds": 5,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 3
+    }
+  ]
+}
