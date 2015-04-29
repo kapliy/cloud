@@ -1,0 +1,19 @@
+{
+  "id": "simple-server",
+  "cmd": "echo A $PORT B $PORT0; python -m SimpleHTTPServer 4400",
+  "cpus": 0.5,
+  "mem": 1024,
+  "ports": [4400],
+  "requirePorts": true,
+  "instances": 1,
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "path": "/",
+      "gracePeriodSeconds": 5,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 3
+    }
+  ]
+}
