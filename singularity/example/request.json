@@ -1,0 +1,9 @@
+{
+    "id": "mesos-dropwizard-service",
+    "owners": [
+        "akapliy@acadian-asset.com"
+    ],
+    "daemon": true,
+    "rackSensitive": false,
+    "loadBalanced": false
+}

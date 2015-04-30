@@ -1,0 +1,17 @@
+{
+    "deploy": {
+        "requestId": "mesos-dropwizard-service",
+        "id": "1",
+        "command": "java -jar helloworld-1.0-SNAPSHOT.jar server example.yml",
+        "resources": {
+            "cpus": 0.1,
+            "memoryMb": 128,
+            "numPorts": 0
+        },
+        "uris": [
+            "https://github.com/micktwomey/docker-sample-dropwizard-service/releases/download/1.0/helloworld-1.0-SNAPSHOT.jar", 
+            "https://github.com/micktwomey/docker-sample-dropwizard-service/releases/download/1.0/example.yml"
+        ],
+        "skipHealthchecksOnDeploy": false
+    }
+}
