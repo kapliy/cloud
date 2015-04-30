@@ -1,22 +1,21 @@
 {
  "schedule": "R1\/\/PT1M",
- "name": "docker_once",
+ "name": "runner_once",
  "owner": "akapliy@acadian-asset.com",
- "owner_name": "akapliy",
+ "owner_name": "Anton Kapliy",
  "container": {
    "type": "DOCKER",
-   "image": "libmesos/ubuntu",
+   "image": "kapliy/aam-lite:latest",
    "volumes": [ { "containerPath": "/opt/anaconda", "hostPath": "/opt/anaconda", "mode": "RO" },
-                { "containerPath": "/mnt/home", "hostPath": "/home/akapliy", "mode": "RO" } ]
+                { "containerPath": "/mnt/home", "hostPath": "/home/akapliy", "mode": "RO" },
+		{ "containerPath": "/bulkinsert", "hostPath": "/bulkinsert", "mode": "RW" } ]
  },
  "environmentVariables": [
-    {
-      "name": "BRANCH",
-      "value": "latest"
-    }
+    { "name": "BRANCH", "value": "latest" }
  ],
  "cpus": "1.0",
  "mem": "2014",
+ "retries": 2,
  "uris": [],
  "command": "cd $MESOS_SANDBOX && echo INSIDE && pwd && ls && mount && echo FINISHED"
 }
