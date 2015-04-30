@@ -1,0 +1,44 @@
+server:
+  type: simple
+  applicationContextPath: /singularity
+  connector:
+    type: http
+    port: 7099
+  requestLog:
+    appenders:
+      - type: file
+        currentLogFilename: /var/log/singularity/access.log
+        archivedLogFilenamePattern: /var/log/singularity/access-%d.log.gz
+
+database:
+  driverClass: com.mysql.jdbc.Driver
+  user: root
+  password: password
+  url: jdbc:mysql://localhost:3306/singularity
+
+mesos:
+  master: zk://localhost:2181/mesos
+  defaultCpus: 1
+  defaultMemory: 2048
+  frameworkName: Singularity
+  frameworkId: Singularity
+  frameworkFailoverTimeout: 1000000
+
+zookeeper:
+  quorum: bos-rndjob2:2181
+  zkNamespace: singularity
+  sessionTimeoutMillis: 60000
+  connectTimeoutMillis: 5000
+  retryBaseSleepTimeMilliseconds: 1000
+  retryMaxTries: 3
+
+logging:
+  loggers:
+    "com.hubspot.singularity" : TRACE
+
+enableCorsFilter: true
+sandboxDefaultsToTaskId: false  # enable if using SingularityExecutor
+
+ui:
+  title: Singularity-AAM
+  baseUrl: http://bos-rndjob2:7099/singularity
