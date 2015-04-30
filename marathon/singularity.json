@@ -1,0 +1,24 @@
+{
+  "id": "singularity",
+  "cmd": "cd /opt/apache-singularity && java -jar SingularityService/target/SingularityService-*-shaded.jar server singularity_config.yaml",
+  "cpus": 0.5,
+  "mem": 1024,
+  "ports": [7099],
+  "requirePorts": true,
+  "constraints": [
+      ["host", "LIKE", "bos-rndjob2.*"]
+  ],
+  "instances": 1,
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "ignoreHttp1xx": true,
+      "path": "/singularity",
+      "portIndex": 0,
+      "gracePeriodSeconds": 300,
+      "timeoutSeconds": 20,
+      "intervalSeconds": 60,
+      "maxConsecutiveFailures": 3
+    }
+  ]
+}
