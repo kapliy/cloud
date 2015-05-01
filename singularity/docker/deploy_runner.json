@@ -1,7 +1,7 @@
 {
     "deploy": {
         "requestId": "runner",
-        "id": "4",
+        "id": "7",
         "containerInfo": {
             "type": "DOCKER",
 	    "volumes": [
@@ -14,7 +14,6 @@
                 "image": "kapliy/aam-lite:latest"
             }
         },
-	"command": "echo HELLO WORLD",
 	"env" : {
 	     "BRANCH": "latest"
 	},
@@ -22,6 +21,7 @@
             "cpus": 1.0,
             "memoryMb": 2048
         },
+	"command": "/bin/bash -c ",
         "skipHealthchecksOnDeploy": false,
 	"deployHealthTimeoutSeconds": 10
     }
