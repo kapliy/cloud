@@ -1,0 +1,7 @@
+{
+        "id": "runner",
+        "owners": [
+            "akapliy@acadian-asset.com"
+        ],
+        "daemon": false
+}

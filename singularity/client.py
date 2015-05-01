@@ -64,11 +64,13 @@ class SingularityAPI(object):
         r = requests.post(url, data=jsn, headers=headers)
         return self._handle_response(r)
         
-    def run(self, request):
+    def run(self, request, jsn):
+        jsn = self._process_json(jsn)
         url = os.path.join(self.endpoint, 'requests', 'request', request, 'run')
         if self.verbose:
             print url
-        r = requests.post(url)
+        headers = {'Content-Type': 'application/json'}
+        r = requests.post(url, data=jsn, headers=headers)
         return self._handle_response(r)
         
     def ls(self):
@@ -100,9 +102,13 @@ if __name__ == '__main__':
                         type=str, default='http://bos-rndjob2:7099/singularity/api')
     parser.add_argument('-a', '--action', dest='action',
                         help='API action to perform',
+                        choices=['ls', 'request', 'rm', 'deploy', 'run'],
                         type=str, default='ls')
-    parser.add_argument('-n', '--name', '--request', dest='request',
-                        help='Name of the request',
+    parser.add_argument('-r', '--requestid', dest='requestid',
+                        help='Name (ID) of the Singularity Request object',
+                        type=str, default=None)
+    parser.add_argument('-d', '--deployid', dest='deployid',
+                        help='Name (ID) of the Singularity Deploy object',
                         type=str, default=None)
     parser.add_argument('-j', '--json', dest='json',
                         help='A json object - either as a string or file',
@@ -113,19 +119,21 @@ if __name__ == '__main__':
     api = SingularityAPI(args.endpoint, verbose=True)
     # process requested action
     if args.action in ('ls', 'get'):
-        if args.request:
-            api.get(args.request)
+        if args.requestid:
+            api.get(args.requestid)
         else:
             api.ls()
     elif args.action in ('run',):
-        if not args.request:
-            raise ValueError('please supply Singularity request name via --request')
-        api.run(args.request)
-    elif args.action in ('rm', 'del', 'delete', 'destroy'):
-        if not args.request:
-            raise ValueError('please supply Singularity request name via --request')
-        api.destroy(args.request)
-    elif args.action in ('add',):
+        if not args.requestid:
+            raise ValueError('please supply Singularity request name via --requestid')
+        if not args.json:
+            raise ValueError('please supply job arguments in a json file via --json')
+        api.run(args.requestid, args.json)
+    elif args.action in ('rm', ):
+        if not args.requestid:
+            raise ValueError('please supply Singularity request name via --requestid')
+        api.destroy(args.requestid)
+    elif args.action in ('request', ):
         if not args.json:
             raise ValueError('please supply a json file via --json')
         api.add(args.json)

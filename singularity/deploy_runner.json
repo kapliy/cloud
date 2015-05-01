@@ -1,0 +1,28 @@
+{
+    "deploy": {
+        "requestId": "runner",
+        "id": "4",
+        "containerInfo": {
+            "type": "DOCKER",
+	    "volumes": [
+	        { "containerPath": "/opt/anaconda", "hostPath": "/opt/anaconda", "mode": "RO" },
+                { "containerPath": "/mnt/home", "hostPath": "/home/akapliy", "mode": "RO" },
+		{ "containerPath": "/bulkinsert", "hostPath": "/bulkinsert", "mode": "RW" }
+	    ],
+            "docker": {
+                "network": "HOST",
+                "image": "kapliy/aam-lite:latest"
+            }
+        },
+	"command": "echo HELLO WORLD",
+	"env" : {
+	     "BRANCH": "latest"
+	},
+        "resources": {
+            "cpus": 1.0,
+            "memoryMb": 2048
+        },
+        "skipHealthchecksOnDeploy": false,
+	"deployHealthTimeoutSeconds": 10
+    }
+}
