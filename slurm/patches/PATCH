@@ -1,0 +1,31 @@
+diff --git a/src/plugins/jobcomp/elasticsearch/jobcomp_elasticsearch.c b/src/plugins/jobcomp/elasticsearch/jobcomp_elasticsearch.c
+index b442a52..64becce 100644
+--- a/src/plugins/jobcomp/elasticsearch/jobcomp_elasticsearch.c
++++ b/src/plugins/jobcomp/elasticsearch/jobcomp_elasticsearch.c
+@@ -102,7 +102,7 @@ const char plugin_name[] = "Job completion elasticsearch logging plugin";
+ const char plugin_type[] = "jobcomp/elasticsearch";
+ const uint32_t plugin_version = SLURM_VERSION_NUMBER;
+ 
+-#define JOBCOMP_DATA_FORMAT "{\"jobid\":%lu,\"username\":\"%s\","\
++#define JOBCOMP_DATA_FORMAT "{\"jobid\":%lu,\"name\":\"%s\",\"username\":\"%s\","\
+ 	"\"user_id\":%lu,\"groupname\":\"%s\",\"group_id\":%lu,"\
+ 	"\"@start\":\"%s\",\"@end\":\"%s\",\"elapsed\":%ld,"\
+ 	"\"partition\":\"%s\",\"alloc_node\":\"%s\","\
+@@ -740,7 +740,7 @@ extern int slurm_jobcomp_log_record(struct job_record *job_ptr)
+ 	buffer = xmalloc(B_SIZE);
+ 
+ 	nwritten = snprintf(buffer, B_SIZE, JOBCOMP_DATA_FORMAT,
+-			    (unsigned long) job_ptr->job_id, usr_str,
++			    (unsigned long) job_ptr->job_id, job_ptr->name, usr_str,
+ 			    (unsigned long) job_ptr->user_id, grp_str,
+ 			    (unsigned long) job_ptr->group_id, start_str,
+ 			    end_str, (long) elapsed_time,
+@@ -755,7 +755,7 @@ extern int slurm_jobcomp_log_record(struct job_record *job_ptr)
+ 		buffer = xrealloc(buffer, B_SIZE);
+ 
+ 		nwritten = snprintf(buffer, B_SIZE, JOBCOMP_DATA_FORMAT,
+-				    (unsigned long) job_ptr->job_id, usr_str,
++				    (unsigned long) job_ptr->job_id, job_ptr->name, usr_str,
+ 				    (unsigned long) job_ptr->user_id, grp_str,
+ 				    (unsigned long) job_ptr->group_id,
+ 				    start_str, end_str, (long) elapsed_time,
