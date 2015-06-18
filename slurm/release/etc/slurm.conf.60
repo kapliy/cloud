@@ -1,0 +1,102 @@
+# See the slurm.conf man page for more information.
+
+# Main controller
+ControlMachine=bos-rndjob3
+#ControlAddr=
+
+# Backup controller
+# (make sure that StateSaveLocation is on a network share!)
+BackupController=bos-rndjob4
+
+MailProg=/usr/bin/mail
+MpiDefault=none
+#MpiParams=ports=#-#
+
+# logging / slurm process configuration
+SlurmctldPidFile=/var/run/slurmctld.pid
+SlurmctldPort=6810-6817
+SlurmdPidFile=/var/run/slurmd.pid
+SlurmdPort=6818
+SlurmdSpoolDir=/var/spool/slurmd
+SlurmctldDebug=3
+SlurmctldLogFile=/var/log/slurm/slurmctld.log
+SlurmdDebug=3
+SlurmdLogFile=/var/log/slurm/slurmd.log
+SlurmUser=root
+SlurmdUser=root
+# StateSaveLocation=/var/spool/slurmctld
+StateSaveLocation=/home/slurm/spool
+SwitchType=switch/none
+
+# TIMERS
+#KillWait=30
+#MinJobAge=300
+SlurmctldTimeout=120   # seconds before backup controller assumes control if the primary fails to respond
+#SlurmdTimeout=300
+MessageTimeout=60
+
+# SCHEDULING & PRIORITY
+# node allocation
+SelectType=select/cons_res
+SelectTypeParameters=CR_Core_Memory
+# TaskPlugin=task/affinity  # or task/cgroup - assigns a specific core to each job
+TaskPlugin=task/none        # no affinity binding. Each job has access to full node resources
+MaxTasksPerNode=256
+OverTimeLimit=5  # jobs are allowed to exceed declared time limit by a few minutes
+FastSchedule=0
+SchedulerType=sched/backfill   # out-of-order scheduling to fill holes
+SchedulerParameters=bf_max_job_user=15,bf_interval=30
+
+# priority scheme
+PriorityType=priority/multifactor
+PriorityMaxAge=24:00:00
+PriorityDecayHalfLife=45
+PriorityCalcPeriod=5
+PriorityWeightAge=400
+PriorityWeightFairshare=400
+PriorityWeightPartition=200
+PriorityWeightJobSize=0
+PriorityWeightQOS=0
+
+# LOGGING AND ACCOUNTING
+ClusterName=ClusterRunner
+ProctrackType=proctrack/linuxproc  # gid/cgroups are also available, but are slower
+AccountingStorageEnforce=associations   #limits  (allow to set limits per-user or per-association)
+AccountingStorageType=accounting_storage/slurmdbd
+AccountingStorageHost=bos-rndjob3
+AccountingStoragePort=6819
+# backups
+AccountingStorageBackupHost=bos-rndjob4
+
+#JobAcctGatherFrequency=30
+JobAcctGatherType=jobacct_gather/linux
+# elastic search plugin to collect job statistics
+# this effectively replicates what's saved in accounting storage (set up above)
+JobCompType=jobcomp/elasticsearch
+JobCompLoc=http://bos-rndjob3:9200
+
+# LIMITS and SETTINGS
+MaxJobCount=500000
+MinJobAge=43200  # in seconds - 12 hours = 43200
+MaxArraySize=50000
+ReturnToService=2   # automatically re-enable nodes that went down temporarily.
+                    # 1 only re-adds nodes that were removed for being unresponsive
+DefMemPerCPU=1500
+MaxMemPerCPU=25000
+
+# PROLOG/EPILOG
+TaskProlog=/home/slurm/release/etc/prolog.sh
+
+# LICENSES (these are basically floating shared resources)
+Licenses=dbrnd02:60,db02:60
+
+# ALL POSSIBLE GENERIC PER-NODE RESOURCES
+GresTypes=unique
+
+# COMPUTE NODES
+NodeName=bos-rndjob[1-3] CPUs=4 RealMemory=40200 Gres=unique:1 State=UNKNOWN
+NodeName=bos-rndjob[4-6] CPUs=16 RealMemory=61000 Gres=unique:1 State=UNKNOWN
+
+PartitionName=batch Nodes=bos-rndjob[1-6] Default=YES DefaultTime=30 MaxTime=1440 State=UP Priority=100 Shared=NO
+PartitionName=quick Nodes=bos-rndjob[1-6] Default=NO DefaultTime=2 MaxTime=10 State=UP Priority=100 Shared=YES
+PartitionName=prod Nodes=bos-rndjob[1-6] Default=NO DefaultTime=30 MaxTime=1440 State=UP Priority=1000 Shared=NO
