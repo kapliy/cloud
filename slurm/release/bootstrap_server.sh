@@ -10,7 +10,7 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 export PROJDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-echo "(Re)starting SLURMD (worker) daemon on $(hostname):"
+echo "(Re)starting SLURMDBD and SLURMCTLD (database/controller) daemon on $(hostname):"
 echo $PROJDIR
 
 # creates all required directories to bootstrap server daemons
